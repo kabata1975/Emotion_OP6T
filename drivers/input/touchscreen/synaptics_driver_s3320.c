@@ -174,6 +174,7 @@ struct fp_underscreen_info {
 #define SingleTap           15  // single tap
 
 
+#ifdef VENDOR_EDIT_OXYGEN
 #define KEY_GESTURE_W          	246 //w
 #define KEY_GESTURE_M      		247 //m
 #define KEY_GESTURE_S			248 //s
@@ -183,6 +184,7 @@ struct fp_underscreen_info {
 #define KEY_GESTURE_V           252 // draw v to toggle flashlight
 #define KEY_GESTURE_LEFT_V      253 // draw left arrow for previous track
 #define KEY_GESTURE_RIGHT_V     254 // draw right arrow for next track
+#endif
 
 #define BIT0 (0x1 << 0)
 #define BIT1 (0x1 << 1)
@@ -1494,7 +1496,7 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 				ts->fp_up_down = 0;
 				ts->fp_aod_cnt = 0;
 				sysfs_notify(&ts->dev->kobj, NULL,
-					dev_attr_fp_irq.attr.name);
+dev_attr_fp_irq.attr.name);
 				TPD_DEBUG("%s:FINGER_UP %d\n", __func__,
 					ts->fp_up_down);
 				/*update tp info*/
@@ -1520,13 +1522,9 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 			gesture = UnkownGestrue;
 			break;
 		}
-<<<<<<< HEAD
-
-=======
 #endif
 #ifdef VENDOR_EDIT_OXYGEN
 #ifndef WAKE_GESTURES
->>>>>>> 037a284d5f9a... OnePlus 6: Wake gestures, sweep2wake and doubletap2wake
 	keyCode = UnkownGestrue;
 	// Get key code based on registered gesture.
 	switch (gesture) {
@@ -1563,11 +1561,8 @@ static void gesture_judge(struct synaptics_ts_data *ts)
 		default:
 			break;
 	}
-<<<<<<< HEAD
-=======
 #endif 
 #endif
->>>>>>> 037a284d5f9a... OnePlus 6: Wake gestures, sweep2wake and doubletap2wake
 
 	TPD_ERR("detect %s gesture\n", gesture == DouTap ? "(double tap)" :
 			gesture == UpVee ? "(V)" :
@@ -2733,7 +2728,6 @@ static ssize_t synaptics_rmi4_baseline_show_s3508(struct device *dev, char *buf,
 	   num_read_chars += sprintf(&(buf[num_read_chars]), "%d error(s). %s\n", error_count, error_count?"":"All test passed.");
 	   return num_read_chars;
 	   }
-
 	//ph = (struct test_header *)(fw->data);
 	 */
 
@@ -3001,7 +2995,7 @@ TEST_WITH_CBC_s3508:
 	TPD_ERR("Step 5 : Check RT251 for random touch event\n");
 	ret = i2c_smbus_write_byte_data(ts->client, F54_ANALOG_DATA_BASE, 0xFB);/*select report type 0xFB*/
 	ret = i2c_smbus_write_word_data(ts->client, F54_ANALOG_DATA_BASE+1, 0x00);/*set fifo 00*/
-	ret = i2c_smbus_write_byte_data(ts->client, F54_ANALOG_COMMAND_BASE, 0x01);/*get report*/
+ret = i2c_smbus_write_byte_data(ts->client, F54_ANALOG_COMMAND_BASE, 0x01);/*get report*/
 	checkCMD(100);
 
 	for (x = 0; x < TX_NUM; x++) {
@@ -3691,20 +3685,18 @@ static int	synaptics_input_init(struct synaptics_ts_data *ts)
 	set_bit(BTN_TOOL_FINGER, ts->input_dev->keybit);
 #ifdef SUPPORT_GESTURE
 	set_bit(KEY_F4 , ts->input_dev->keybit);//doulbe-tap resume
-<<<<<<< HEAD
-=======
 #ifdef WAKE_GESTURES
 	set_bit(KEY_POWER, ts->input_dev->keybit);
 	input_set_capability(ts->input_dev, EV_KEY, KEY_POWER);
 #endif
 #ifdef VENDOR_EDIT_OXYGEN
->>>>>>> 037a284d5f9a... OnePlus 6: Wake gestures, sweep2wake and doubletap2wake
 	set_bit(KEY_DOUBLE_TAP, ts->input_dev->keybit);
 	set_bit(KEY_GESTURE_CIRCLE, ts->input_dev->keybit);
 	set_bit(KEY_GESTURE_V, ts->input_dev->keybit);
 	set_bit(KEY_GESTURE_TWO_SWIPE, ts->input_dev->keybit);
 	set_bit(KEY_GESTURE_LEFT_V, ts->input_dev->keybit);
 	set_bit(KEY_GESTURE_RIGHT_V, ts->input_dev->keybit);
+#endif
 	set_bit(KEY_APPSELECT, ts->input_dev->keybit);
 	set_bit(KEY_BACK, ts->input_dev->keybit);
 #endif
@@ -5003,8 +4995,8 @@ static int init_synaptics_proc(void)
 	}
 #ifdef SUPPORT_TP_TOUCHKEY
 	prEntry_tmp = proc_create("key_switch", 0666, prEntry_tp, &key_switch_proc_fops);
-	if(prEntry_tmp == NULL){
-		ret = -ENOMEM;
+if(prEntry_tmp == NULL){
+	ret = -ENOMEM;
         TPD_ERR("Couldn't create key_switch\n");
 	}
 
